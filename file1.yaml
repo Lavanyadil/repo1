@@ -1,1 +1,19 @@
+---
+- hosts: 192.168.10.100
+  gather_facts: no
+  connection: network_cli
+  vars:
+    ansible_network_os: ios  # Specify the appropriate network operating system
+    ansible_python_interpreter: /usr/bin/python3
 
+  tasks:
+    - name: Set IP address
+      ios_config:
+        lines:
+          - ip address 1.1.1.1 255.255.255.0
+          - no shutdown
+        parents: interface loopback0
+      register: output
+
+    - debug:
+        msg: "{{ output }}"
